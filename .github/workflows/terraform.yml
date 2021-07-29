@@ -48,8 +48,6 @@ jobs:
         if: github.event_name == 'pull_request'
         env:
           PLAN: "terraform\n${{ steps.plan.outputs.stdout }}"
-          env:
-            GCP_SA_JSON: ${{ secrets.GCP_SA_JSON }}
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           script: |
