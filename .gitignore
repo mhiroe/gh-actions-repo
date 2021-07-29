@@ -1,7 +1,5 @@
 # sa credential
-terraform_sa_credential.json
-sa-tf.json
-sa-tf-flat.json
+sa-tf-flat.txt
 
 # Local .terraform directories
 **/.terraform/*
