@@ -17,7 +17,7 @@ jobs:
         dir: [terraform/env/gh-actions]
     steps:
       - name: Checkout
-        uses: actions/checkout@v2
+        uses: actions/checkout@v1
 
       - name: Setup Terraform
         uses: hashicorp/setup-terraform@v1
@@ -36,9 +36,6 @@ jobs:
         working-directory: ${{ matrix.dir}}
         env:
           GCP_SA_JSON: ${{ secrets.GCP_SA_JSON }}
-        run: echo ${{ steps.plan.outputs.stdout }}
-        run: echo ${{ steps.plan.outputs.stderr }}
-        run: echo ${{ steps.plan.outputs.exitcode }}
       - name: Terraform Validate
         id: validate
         run: terraform validate -no-color
