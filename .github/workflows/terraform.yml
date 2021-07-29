@@ -12,6 +12,9 @@ jobs:
   terraform:
     name: "Terraform"
     runs-on: ubuntu-latest
+    strategy:
+    matrix:
+    dir: [terraform/env/gh-actions]
     steps:
       - name: Checkout
         uses: actions/checkout@v2
@@ -25,21 +28,25 @@ jobs:
       - name: Terraform Format
         id: fmt
         run: terraform fmt -check
+        working-directory: ${{ matrix.dir}}
 
       - name: Terraform Init
         id: init
         run: terraform init
+        working-directory: ${{ matrix.dir}}
         env:
           GCP_SA_JSON: ${{ secrets.GCP_SA_JSON }}
 
       - name: Terraform Validate
         id: validate
         run: terraform validate -no-color
+        working-directory: ${{ matrix.dir}}
 
       - name: Terraform Plan
         id: plan
         if: github.event_name == 'pull_request'
         run: terraform plan -no-color
+        working-directory: ${{ matrix.dir}}
         continue-on-error: true
         env:
           GCP_SA_JSON: ${{ secrets.GCP_SA_JSON }}
@@ -50,7 +57,6 @@ jobs:
           PLAN: "terraform\n${{ steps.plan.outputs.stdout }}"
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
-          GCP_SA_JSON: ${{ secrets.GCP_SA_JSON }}
           script: |
             const output = `#### Terraform Format and Style 🖌\`${{ steps.fmt.outcome }}\`
             #### Terraform Initialization ⚙️\`${{ steps.init.outcome }}\`
@@ -81,5 +87,6 @@ jobs:
       - name: Terraform Apply
         if: github.ref == 'refs/heads/main' && github.event_name == 'push'
         run: terraform apply -auto-approve
+        working-directory: ${{ matrix.dir}}
         env:
           GCP_SA_JSON: ${{ secrets.GCP_SA_JSON }}
