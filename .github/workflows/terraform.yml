@@ -2,8 +2,8 @@ name: "Terraform"
 
 on:
   push:
-  paths-ignore:
-      - '.github/workflows/**' # workflowsの更新時はActionsの発火除外。 https://docs.github.com/ja/free-pro-team@latest/actions/reference/workflow-syntax-for-github-actions#onpushpull_requestpaths
+    paths-ignore:
+      - ".github/workflows/**" # workflowsの更新時はActionsの発火除外。 https://docs.github.com/ja/free-pro-team@latest/actions/reference/workflow-syntax-for-github-actions#onpushpull_requestpaths
     branches:
       - main
   pull_request:
