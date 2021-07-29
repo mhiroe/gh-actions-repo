@@ -2,6 +2,8 @@ name: "Terraform"
 
 on:
   push:
+  paths-ignore:
+      - '.github/workflows/**' # workflowsの更新時はActionsの発火除外。 https://docs.github.com/ja/free-pro-team@latest/actions/reference/workflow-syntax-for-github-actions#onpushpull_requestpaths
     branches:
       - main
   pull_request:
@@ -27,6 +29,8 @@ jobs:
       - name: Terraform Init
         id: init
         run: terraform init
+        env:
+          GCP_SA_JSON: ${{ secrets.GCP_SA_JSON }}
 
       - name: Terraform Validate
         id: validate
@@ -37,11 +41,15 @@ jobs:
         if: github.event_name == 'pull_request'
         run: terraform plan -no-color
         continue-on-error: true
+        env:
+          GCP_SA_JSON: ${{ secrets.GCP_SA_JSON }}
 
       - uses: actions/github-script@0.9.0
         if: github.event_name == 'pull_request'
         env:
           PLAN: "terraform\n${{ steps.plan.outputs.stdout }}"
+          env:
+            GCP_SA_JSON: ${{ secrets.GCP_SA_JSON }}
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           script: |
@@ -74,3 +82,5 @@ jobs:
       - name: Terraform Apply
         if: github.ref == 'refs/heads/main' && github.event_name == 'push'
         run: terraform apply -auto-approve
+        env:
+          GCP_SA_JSON: ${{ secrets.GCP_SA_JSON }}
