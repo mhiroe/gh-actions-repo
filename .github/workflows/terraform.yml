@@ -2,6 +2,8 @@ name: "Terraform"
 
 on:
   push:
+    paths-ignore:
+      - ".github/workflows/**" # workflowsの更新時はActionsの発火除外。 https://docs.github.com/ja/free-pro-team@latest/actions/reference/workflow-syntax-for-github-actions#onpushpull_requestpaths
     branches:
       - main
   pull_request:
@@ -10,9 +12,12 @@ jobs:
   terraform:
     name: "Terraform"
     runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        dir: [terraform/env/gh-actions]
     steps:
       - name: Checkout
-        uses: actions/checkout@v2
+        uses: actions/checkout@v1
 
       - name: Setup Terraform
         uses: hashicorp/setup-terraform@v1
@@ -23,20 +28,27 @@ jobs:
       - name: Terraform Format
         id: fmt
         run: terraform fmt -check
+        working-directory: ${{ matrix.dir}}
 
       - name: Terraform Init
         id: init
         run: terraform init
-
+        working-directory: ${{ matrix.dir}}
+        env:
+          GOOGLE_CREDENTIALS: ${{ secrets.GOOGLE_CREDENTIALS }}
       - name: Terraform Validate
         id: validate
         run: terraform validate -no-color
+        working-directory: ${{ matrix.dir}}
 
       - name: Terraform Plan
         id: plan
         if: github.event_name == 'pull_request'
         run: terraform plan -no-color
+        working-directory: ${{ matrix.dir}}
         continue-on-error: true
+        env:
+          GOOGLE_CREDENTIALS: ${{ secrets.GOOGLE_CREDENTIALS }}
 
       - uses: actions/github-script@0.9.0
         if: github.event_name == 'pull_request'
@@ -74,3 +86,6 @@ jobs:
       - name: Terraform Apply
         if: github.ref == 'refs/heads/main' && github.event_name == 'push'
         run: terraform apply -auto-approve
+        working-directory: ${{ matrix.dir}}
+        env:
+          GOOGLE_CREDENTIALS: ${{ secrets.GOOGLE_CREDENTIALS }}

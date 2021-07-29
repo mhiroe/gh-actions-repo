@@ -11,8 +11,6 @@ terraform {
 provider "google" {
   project = var.basic.project
   region  = var.basic.region
-  # put json under env/dev-dupf/ 
-  credentials = file("sa-tf.json")
 }
 
 resource "google_project_service" "enable-services" {
