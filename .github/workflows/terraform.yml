@@ -35,7 +35,7 @@ jobs:
         run: terraform init
         working-directory: ${{ matrix.dir}}
         env:
-          GCP_SA_JSON: ${{ secrets.GCP_SA_JSON }}
+          GOOGLE_CREDENTIALS: ${{ secrets.GOOGLE_CREDENTIALS }}
       - name: Terraform Validate
         id: validate
         run: terraform validate -no-color
@@ -48,7 +48,7 @@ jobs:
         working-directory: ${{ matrix.dir}}
         continue-on-error: true
         env:
-          GCP_SA_JSON: ${{ secrets.GCP_SA_JSON }}
+          GOOGLE_CREDENTIALS: ${{ secrets.GOOGLE_CREDENTIALS }}
 
       - uses: actions/github-script@0.9.0
         if: github.event_name == 'pull_request'
@@ -88,4 +88,4 @@ jobs:
         run: terraform apply -auto-approve
         working-directory: ${{ matrix.dir}}
         env:
-          GCP_SA_JSON: ${{ secrets.GCP_SA_JSON }}
+          GOOGLE_CREDENTIALS: ${{ secrets.GOOGLE_CREDENTIALS }}
