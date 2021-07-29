@@ -13,8 +13,8 @@ jobs:
     name: "Terraform"
     runs-on: ubuntu-latest
     strategy:
-    matrix:
-    dir: [terraform/env/gh-actions]
+      matrix:
+        dir: [terraform/env/gh-actions]
     steps:
       - name: Checkout
         uses: actions/checkout@v2
