@@ -1,6 +1,5 @@
 name: "Terraform"
 
-runs-on: self-hosted
 on:
   push:
     paths-ignore:
@@ -12,7 +11,8 @@ on:
 jobs:
   terraform:
     name: "Terraform"
-    runs-on: ubuntu-latest
+    # runs-on: ubuntu-latest
+    runs-on: self-hosted
     strategy:
       matrix:
         dir: [terraform/env/gh-actions]
