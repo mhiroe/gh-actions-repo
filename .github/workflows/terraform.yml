@@ -1,5 +1,6 @@
 name: "Terraform"
 
+runs-on: self-hosted
 on:
   push:
     paths-ignore:
