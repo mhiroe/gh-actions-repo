@@ -31,5 +31,9 @@ https://medium.com/interleap/automating-terraform-deployment-to-google-cloud-wit
 # ./svc.sh install
 # ./svc.sh start
 
-# ここ参考に修正する
+# ここ参考にstartup script 修正するとよさそう
 # https://github.com/terraform-google-modules/terraform-google-github-actions-runners/blob/v1.0.0/modules/gh-runner-mig-vm/scripts/startup.sh
+
+
+# 公式手順 (self-hosted-runnerの追加)
+https://docs.github.com/ja/actions/hosting-your-own-runners/adding-self-hosted-runners
