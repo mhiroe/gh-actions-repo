@@ -112,11 +112,11 @@ provider "google" {
   region       = var.basic.region
 }
 
-# # 適当なgcs 権限の借用 テスト用
-# resource "google_storage_bucket" "test" {
-#   name     = "my-project-id-test-bucket"
-#   location = "us-west1"
-# }
+# 適当なgcs 権限の借用 テスト用
+resource "google_storage_bucket" "test" {
+  name     = "my-project-id-test-bucket"
+  location = "us-west1"
+}
 
 
 resource "google_project_service" "enable-services" {
