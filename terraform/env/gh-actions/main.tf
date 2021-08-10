@@ -79,8 +79,15 @@ resource "google_service_account_iam_member" "sa-tfexec-member" {
 
   service_account_id = google_service_account.sa-tfexc.name
 
-  role   = "roles/iam.serviceAccountTokenCreator"
-  member = "user:mamoot@monyama.click"
+  for_each = toset([
+    "user:mamoot@monyama.click",
+    "serviceAccount:sa-tf-monyama@gh-actions-321300.iam.gserviceaccount.com",
+  ])
+
+  role = "roles/iam.serviceAccountTokenCreator"
+
+  # member = "user:mamoot@monyama.click"
+  member = each.value
   depends_on = [
     google_service_account.sa-tfexc
   ]
@@ -95,10 +102,7 @@ data "google_service_account_access_token" "sa" {
   provider               = google.tokengen
   target_service_account = google_service_account.sa-tfexc.email
   lifetime               = "600s"
-  # scopes                 = ["cloud-platform"]
-  scopes = [
-    "https://www.googleapis.com/auth/cloud-platform",
-  ]
+  scopes                 = ["cloud-platform"]
 }
 
 # tokenを使って default providerを設定
